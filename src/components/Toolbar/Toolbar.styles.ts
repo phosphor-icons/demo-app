@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { Cursor } from "../../state";
+import { NoteAction } from "../Note/Note.styles";
 
-export const ToolbarContainer = styled.nav`
+export const ToolbarContainer = styled.div`
   display: inline-flex;
   flex-direction: row;
   align-items: flex-start;
@@ -15,7 +16,9 @@ export const ToolbarContainer = styled.nav`
 
 export const ToolbarDragHandle = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 8px;
   margin: 8px;
   touch-action: none;
 
@@ -29,8 +32,7 @@ export const ToolbarDragHandle = styled.div`
     outline: none;
   }
 
-  & > svg {
-    pointer-events: none;
-    touch-action: none;
+  & > ${NoteAction} > svg {
+    cursor: ${Cursor.POINTER}, pointer;
   }
 `;

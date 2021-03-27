@@ -12,14 +12,14 @@ export const ToolButtonContainer = styled.button<{ $active: boolean }>`
   margin-right: -1px;
   transition: all 100ms ease;
   cursor: ${Cursor.POINTER}, pointer;
-  z-index: 1;
+  z-index: 2;
 
   &:focus {
     outline: none;
   }
 
   &:active {
-    z-index: 0;
+    z-index: 1;
     color: white;
     background-color: #925bff;
     transform: translate(4px, 4px);
@@ -31,5 +31,7 @@ export const ToolButtonContainer = styled.button<{ $active: boolean }>`
     css`
       color: white;
       background-color: #925bff;
+      transform: translate(4px, 4px);
+      box-shadow: 0 0 0 0 black;
     `}
 `;

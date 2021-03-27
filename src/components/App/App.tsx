@@ -1,11 +1,14 @@
 import React, { MutableRefObject, useRef } from "react";
 import { createGlobalStyle } from "styled-components";
+import { useRecoilState } from "recoil";
+
 import { WindupChildren } from "windups";
 
-import { Cursor } from "../../state";
+import { Cursor, noteIdsAtom } from "../../state";
 import { AppContainer, TextPad } from "./App.styles";
 import ToolbarTools from "../Toolbar/ToolbarTools";
 import Toolbar from "../Toolbar";
+import Note from "../Note";
 
 const Style = createGlobalStyle`
   body, html {
@@ -22,14 +25,19 @@ const Style = createGlobalStyle`
 
 const App: React.FC<{}> = () => {
   const containerRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
+  const [noteIds, setNoteIds] = useRecoilState(noteIdsAtom);
+
+  const onDeleteNote = (id: string) => {
+    setNoteIds((ids) => ids.filter((i) => i !== id));
+  };
+
   return (
     <AppContainer ref={containerRef}>
       <Style />
-      <ToolbarTools ref={containerRef} />
-      <Toolbar ref={containerRef}>
+      <ToolbarTools ref={containerRef} id="tools" as="nav" />
+      <Toolbar ref={containerRef} id="panel">
         <div
           style={{
-            height: 600,
             width: 400,
             borderRadius: 6,
             border: "2px solid black",
@@ -39,7 +47,7 @@ const App: React.FC<{}> = () => {
           }}
         >
           <WindupChildren>
-            <TextPad contentEditable>
+            <TextPad>
               {"Welcome to "}
               <span style={{ fontWeight: "bold" }}>Phosphor Draw</span>
               {"..."}
@@ -62,6 +70,9 @@ const App: React.FC<{}> = () => {
           </WindupChildren>
         </div>
       </Toolbar>
+      {noteIds.map((id) => (
+        <Note key={id} id={id} ref={containerRef} onDelete={onDeleteNote} />
+      ))}
     </AppContainer>
   );
 };

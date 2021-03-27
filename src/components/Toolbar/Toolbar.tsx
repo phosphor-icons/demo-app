@@ -2,12 +2,19 @@ import React, { forwardRef, MutableRefObject, useRef } from "react";
 import { DotsNine } from "phosphor-react";
 import { motion, TapInfo, useDragControls } from "framer-motion";
 
-import { ToolbarContainer, ToolbarDragHandle } from "./Toolbar";
+import { ToolbarContainer, ToolbarDragHandle } from "./Toolbar.styles";
 
-const dragTransition = { timeConstant: 20, power: 0 };
+const dragTransition = { power: 0 };
 
-const Toolbar = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
-  ({ children }, ref) => {
+export interface ToolbarProps {
+  id: string;
+  as?: string | React.ElementType<any>;
+  children?: React.ReactNode;
+  extras?: React.ReactNode;
+}
+
+const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
+  ({ as, extras, children }, ref) => {
     const controls = useDragControls();
     const dragHandleRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
 
@@ -15,30 +22,28 @@ const Toolbar = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
       event: MouseEvent | TouchEvent | PointerEvent,
       info: TapInfo
     ) => {
-      console.log(event.target);
-      if (event.target === dragHandleRef.current) {
-        console.log("yey");
+      if (event.target !== dragHandleRef.current) {
+        console.log("handle");
       }
     };
 
     return (
-      <motion.nav
+      <motion.div
         style={{ display: "inline-flex" }}
         drag
         dragConstraints={ref as React.RefObject<HTMLDivElement>}
         dragTransition={dragTransition}
         dragControls={controls}
-        // onTapStart={rejectOutsideDrag}
-        // onDrag={rejectOutsideDrag}
-        draggable={false}
+        dragElastic={0}
       >
-        <ToolbarContainer>
+        <ToolbarContainer as={as}>
           <ToolbarDragHandle ref={dragHandleRef}>
             <DotsNine size={24} weight="bold" />
+            {extras}
           </ToolbarDragHandle>
           {children}
         </ToolbarContainer>
-      </motion.nav>
+      </motion.div>
     );
   }
 );
