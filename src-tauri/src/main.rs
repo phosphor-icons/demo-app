@@ -21,7 +21,7 @@ struct Settings {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Snapshot {
+struct AppState {
   settings: Settings,
   notes: Vec<Note>,
 }
@@ -46,7 +46,7 @@ fn main() {
               println!("{}", buf);
             },
             Save { payload} => {
-              let data: Snapshot = serde_json::from_str(&payload).expect("Could not deserialize notes!");
+              let data: AppState = serde_json::from_str(&payload).expect("Could not deserialize notes!");
               println!("{:?}", data);
               serde_json::to_writer_pretty(&File::create("data/notes.json").expect("Could not open file"), &data).expect("Could not write to file");
             },

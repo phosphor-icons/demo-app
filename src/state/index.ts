@@ -2,7 +2,7 @@ import { atom, atomFamily } from "recoil";
 
 export interface AppState {
   settings: Settings;
-  notes: Note[];
+  notes: NoteState[];
 }
 
 export interface Settings {
@@ -35,6 +35,10 @@ export const selectedToolAtom = atom<Tool>({
 export interface Note {
   content?: string;
   locked: boolean;
+}
+
+interface NoteState extends Note {
+  id: string;
 }
 
 export const noteIdsAtom = atom<string[]>({

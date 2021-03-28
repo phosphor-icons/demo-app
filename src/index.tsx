@@ -4,12 +4,8 @@ import reportWebVitals from "./reportWebVitals";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 import { readTextFile } from "tauri/api/fs";
 
-import { Note, noteIdsAtom, noteAtoms, Settings, settingsAtom } from "./state";
+import { noteIdsAtom, noteAtoms, settingsAtom, AppState } from "./state";
 import App from "./components/App";
-
-interface NoteState extends Note {
-  id: string;
-}
 
 (async function () {
   let noteString: string | undefined = undefined;
@@ -21,10 +17,7 @@ interface NoteState extends Note {
 
   const initialize = noteString
     ? ({ set }: MutableSnapshot) => {
-        const state = JSON.parse(noteString!!) as {
-          settings: Settings;
-          notes: NoteState[];
-        };
+        const state = JSON.parse(noteString!!) as AppState;
         set(
           noteIdsAtom,
           state.notes.map(({ id }) => id)
