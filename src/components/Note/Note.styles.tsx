@@ -4,8 +4,8 @@ import { Cursor } from "../../state";
 export const NoteContainer = styled.div``;
 
 export const NoteContent = styled.textarea`
-  resize: none;
-  width: 400px;
+  /* resize: none; */
+  min-width: 400px;
   min-height: 300px;
   padding: 16px;
   background-color: white;

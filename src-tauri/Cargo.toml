@@ -1,11 +1,11 @@
 [package]
-name = "hello-tauri"
+name = "phosphor-draw"
 version = "0.1.0"
-description = "A Tauri App"
+description = "A Tauri Demo App Using Phosphor"
 authors = [ "you" ]
-license = ""
+license = "MIT"
 repository = ""
-default-run = "hello-tauri"
+default-run = "phosphor-draw"
 edition = "2018"
 build = "src/build.rs"
 
@@ -22,5 +22,5 @@ embedded-server = [ "tauri/embedded-server" ]
 no-server = [ "tauri/no-server" ]
 
 [[bin]]
-name = "hello-tauri"
+name = "phosphor-draw"
 path = "src/main.rs"

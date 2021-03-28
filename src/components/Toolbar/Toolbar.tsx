@@ -6,7 +6,7 @@ import { ToolbarContainer, ToolbarDragHandle } from "./Toolbar.styles";
 
 const dragTransition = { power: 0 };
 
-export interface ToolbarProps {
+export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
   as?: string | React.ElementType<any>;
   children?: React.ReactNode;
@@ -14,7 +14,7 @@ export interface ToolbarProps {
 }
 
 const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
-  ({ as, extras, children }, ref) => {
+  ({ as, extras, children, style }, ref) => {
     const controls = useDragControls();
     const dragHandleRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
 
@@ -29,12 +29,13 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
 
     return (
       <motion.div
-        style={{ display: "inline-flex" }}
+        style={{ display: "inline-flex", ...style }}
         drag
         dragConstraints={ref as React.RefObject<HTMLDivElement>}
         dragTransition={dragTransition}
         dragControls={controls}
         dragElastic={0}
+        onDragEnd={(e, i) => console.log(e, i)}
       >
         <ToolbarContainer as={as}>
           <ToolbarDragHandle ref={dragHandleRef}>

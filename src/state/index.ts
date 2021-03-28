@@ -1,5 +1,14 @@
 import { atom, atomFamily } from "recoil";
 
+export interface AppState {
+  settings: Settings;
+  notes: Note[];
+}
+
+export interface Settings {
+  has_onboarded: boolean;
+}
+
 export enum Tool {
   NONE,
   PEN,
@@ -23,7 +32,7 @@ export const selectedToolAtom = atom<Tool>({
   default: Tool.NONE,
 });
 
-interface Note {
+export interface Note {
   content?: string;
   locked: boolean;
 }
@@ -36,4 +45,11 @@ export const noteIdsAtom = atom<string[]>({
 export const noteAtoms = atomFamily<Note, string>({
   key: "notesAtom",
   default: { content: "", locked: false },
+});
+
+export const settingsAtom = atom<Settings>({
+  key: "settings",
+  default: {
+    has_onboarded: false,
+  },
 });

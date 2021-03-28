@@ -1,18 +1,50 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import { RecoilRoot } from "recoil";
+import { MutableSnapshot, RecoilRoot } from "recoil";
+import { readTextFile } from "tauri/api/fs";
 
+import { Note, noteIdsAtom, noteAtoms, Settings, settingsAtom } from "./state";
 import App from "./components/App";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <RecoilRoot>
+interface NoteState extends Note {
+  id: string;
+}
+
+(async function () {
+  let noteString: string | undefined = undefined;
+  try {
+    noteString = await readTextFile("data/notes.json");
+  } catch (e) {
+    console.error(e);
+  }
+
+  const initialize = noteString
+    ? ({ set }: MutableSnapshot) => {
+        const state = JSON.parse(noteString!!) as {
+          settings: Settings;
+          notes: NoteState[];
+        };
+        set(
+          noteIdsAtom,
+          state.notes.map(({ id }) => id)
+        );
+        state.notes.forEach(({ id, content, locked }) => {
+          set(noteAtoms(id), { content, locked });
+        });
+        set(settingsAtom, state.settings);
+      }
+    : undefined;
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <RecoilRoot initializeState={initialize}>
         <App />
-    </RecoilRoot>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+      </RecoilRoot>
+    </React.StrictMode>,
+    document.getElementById("root")
+  );
+})();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

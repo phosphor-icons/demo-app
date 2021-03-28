@@ -1,14 +1,14 @@
 import React, { MutableRefObject, useRef } from "react";
 import { createGlobalStyle } from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useHotkeys } from "react-hotkeys-hook";
 
-import { WindupChildren } from "windups";
-
-import { Cursor, noteIdsAtom } from "../../state";
-import { AppContainer, TextPad } from "./App.styles";
+import { Cursor, noteIdsAtom, settingsAtom } from "../../state";
+import { AppContainer } from "./App.styles";
 import ToolbarTools from "../Toolbar/ToolbarTools";
-import Toolbar from "../Toolbar";
 import Note from "../Note";
+import usePersistence from "../../hooks/usePersistence";
+import Intro from "../Intro/Intro";
 
 const Style = createGlobalStyle`
   body, html {
@@ -26,6 +26,11 @@ const Style = createGlobalStyle`
 const App: React.FC<{}> = () => {
   const containerRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
   const [noteIds, setNoteIds] = useRecoilState(noteIdsAtom);
+  const { has_onboarded } = useRecoilValue(settingsAtom);
+  const [saveSnapshotToDisk] = usePersistence({ minutes: 1 });
+  useHotkeys("ctrl+s", saveSnapshotToDisk, {
+    enableOnTags: ["TEXTAREA", "INPUT"],
+  });
 
   const onDeleteNote = (id: string) => {
     setNoteIds((ids) => ids.filter((i) => i !== id));
@@ -35,41 +40,7 @@ const App: React.FC<{}> = () => {
     <AppContainer ref={containerRef}>
       <Style />
       <ToolbarTools ref={containerRef} id="tools" as="nav" />
-      <Toolbar ref={containerRef} id="panel">
-        <div
-          style={{
-            width: 400,
-            borderRadius: 6,
-            border: "2px solid black",
-            backgroundColor: "white",
-            boxShadow: "4px 4px 0 0 black",
-            padding: 16,
-          }}
-        >
-          <WindupChildren>
-            <TextPad>
-              {"Welcome to "}
-              <span style={{ fontWeight: "bold" }}>Phosphor Draw</span>
-              {"..."}
-              <br />
-              <br />
-              This is a demo of some of the cool things you can build with{" "}
-              <a
-                href="https://phosphoricons.com"
-                style={{ fontWeight: "bold" }}
-              >
-                Phosphor Icons
-              </a>
-              , a flexible icon pack for everyone.
-              <br />
-              <br />
-              With tons of unique interface icons for all sorts of applications,
-              you can build calculators, design applications, writing apps and
-              twitter clones. Anything your heart desires!
-            </TextPad>
-          </WindupChildren>
-        </div>
-      </Toolbar>
+      {!has_onboarded && <Intro ref={containerRef} id="intro" />}
       {noteIds.map((id) => (
         <Note key={id} id={id} ref={containerRef} onDelete={onDeleteNote} />
       ))}
