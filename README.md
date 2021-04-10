@@ -13,7 +13,7 @@ More ways to use at [phosphoricons.com](https://phosphoricons.com).
 
 ## Screenshots
 
-<img src="/meta/screenshot.png" />
+<img src="/meta/screenshot2.png" />
 
 ## Related Projects
 
