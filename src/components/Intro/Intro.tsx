@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { useSetRecoilState } from "recoil";
-import { EyeSlash } from "phosphor-react";
+import { Trash } from "phosphor-react";
 import { WindupChildren } from "windups";
 
 import { settingsAtom } from "../../state";
@@ -20,7 +20,7 @@ const Intro = forwardRef<HTMLDivElement, ToolbarProps>(({ id }, ref) => {
       id={id}
       extras={
         <NoteAction onClick={setHasOnboarded}>
-          <EyeSlash size={24} weight="fill" />
+          <Trash size={24} weight="fill" />
         </NoteAction>
       }
     >

@@ -22,8 +22,8 @@ import App from "./components/App";
           noteIdsAtom,
           state.notes.map(({ id }) => id)
         );
-        state.notes.forEach(({ id, content, locked }) => {
-          set(noteAtoms(id), { content, locked });
+        state.notes.forEach(({ id, ...rest }) => {
+          set(noteAtoms(id), { ...rest });
         });
         set(settingsAtom, state.settings);
       }

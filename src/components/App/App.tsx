@@ -5,6 +5,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 import { Cursor, noteIdsAtom, settingsAtom } from "../../state";
 import { AppContainer } from "./App.styles";
+import Settings from "../Settings";
 import ToolbarTools from "../Toolbar/ToolbarTools";
 import Note from "../Note";
 import usePersistence from "../../hooks/usePersistence";
@@ -39,6 +40,7 @@ const App: React.FC<{}> = () => {
   return (
     <AppContainer ref={containerRef}>
       <Style />
+      <Settings />
       <ToolbarTools ref={containerRef} id="tools" as="nav" />
       {!has_onboarded && <Intro ref={containerRef} id="intro" />}
       {noteIds.map((id) => (

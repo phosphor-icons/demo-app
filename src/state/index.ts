@@ -35,6 +35,7 @@ export const selectedToolAtom = atom<Tool>({
 export interface Note {
   content?: string;
   locked: boolean;
+  visible: boolean;
 }
 
 interface NoteState extends Note {
@@ -48,7 +49,7 @@ export const noteIdsAtom = atom<string[]>({
 
 export const noteAtoms = atomFamily<Note, string>({
   key: "notesAtom",
-  default: { content: "", locked: false },
+  default: { content: "", visible: true, locked: false },
 });
 
 export const settingsAtom = atom<Settings>({

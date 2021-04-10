@@ -1,10 +1,15 @@
 import React, { forwardRef } from "react";
 import { useRecoilState } from "recoil";
-import { Trash, LockOpen, LockKey } from "phosphor-react";
+import { Trash, LockOpen, LockKey, Eye, EyeSlash } from "phosphor-react";
 
 import { noteAtoms } from "../../state";
 import Toolbar from "../Toolbar";
-import { NoteContainer, NoteContent, NoteAction } from "./Note.styles";
+import {
+  NoteContainer,
+  NoteContent,
+  NoteAction,
+  NoteHidden,
+} from "./Note.styles";
 
 interface NoteProps {
   id: string;
@@ -12,14 +17,18 @@ interface NoteProps {
 }
 
 const Note = forwardRef<HTMLDivElement, NoteProps>(({ id, onDelete }, ref) => {
-  const [{ content, locked }, setNote] = useRecoilState(noteAtoms(id));
+  const [{ content, locked, visible }, setNote] = useRecoilState(noteAtoms(id));
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNote({ locked, content: event.target.value });
+    setNote((n) => ({ ...n, content: event.target.value }));
+  };
+
+  const onToggleVisibility = () => {
+    setNote((n) => ({ ...n, visible: !n.visible }));
   };
 
   const onToggleLock = () => {
-    setNote({ content, locked: !locked });
+    setNote((n) => ({ ...n, locked: !locked }));
   };
 
   return (
@@ -28,14 +37,23 @@ const Note = forwardRef<HTMLDivElement, NoteProps>(({ id, onDelete }, ref) => {
       ref={ref}
       extras={
         <>
-          <NoteAction onClick={onToggleLock}>
-            {locked ? (
-              <LockKey size={24} weight="fill" />
+          <NoteAction onClick={onToggleVisibility}>
+            {visible ? (
+              <Eye size={24} weight="fill" />
             ) : (
-              <LockOpen size={24} weight="fill" />
+              <EyeSlash size={24} weight="fill" />
             )}
           </NoteAction>
-          {!locked && (
+          {visible && (
+            <NoteAction onClick={onToggleLock}>
+              {locked ? (
+                <LockKey size={24} weight="fill" />
+              ) : (
+                <LockOpen size={24} weight="fill" />
+              )}
+            </NoteAction>
+          )}
+          {visible && !locked && (
             <NoteAction onClick={() => onDelete(id)}>
               <Trash size={24} weight="fill" />
             </NoteAction>
@@ -44,12 +62,16 @@ const Note = forwardRef<HTMLDivElement, NoteProps>(({ id, onDelete }, ref) => {
       }
     >
       <NoteContainer>
-        <NoteContent
-          value={content}
-          disabled={locked}
-          placeholder="Add some notes..."
-          onChange={onChange}
-        />
+        {visible ? (
+          <NoteContent
+            value={content}
+            disabled={locked}
+            placeholder="Add some notes..."
+            onChange={onChange}
+          />
+        ) : (
+          <NoteHidden>Nothing to see here...</NoteHidden>
+        )}
       </NoteContainer>
     </Toolbar>
   );

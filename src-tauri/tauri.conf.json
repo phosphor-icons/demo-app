@@ -43,8 +43,8 @@
     },
     "window": {
       "title": "Phosphor Draw",
-      "width": 1280,
-      "height": 720,
+      "width": 1100,
+      "height": 850,
       "resizable": true,
       "fullscreen": false
     },

@@ -12,6 +12,7 @@ mod cmd;
 struct Note {
   id: String,
   content: String,
+  visible: bool,
   locked: bool,
 }
 
