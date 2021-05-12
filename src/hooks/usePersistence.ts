@@ -32,7 +32,7 @@ const usePersistence = (time: Time = { seconds: 60 }) => {
     return () => clearInterval(syncHandle);
   }, [time, saveSnapshotToDisk]);
 
-  return [saveSnapshotToDisk];
+  return { saveSnapshotToDisk };
 };
 
 export default usePersistence;

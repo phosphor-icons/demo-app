@@ -25,10 +25,13 @@ const Style = createGlobalStyle`
 `;
 
 const App: React.FC<{}> = () => {
-  const containerRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
+  const containerRef =
+    useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
+
   const [noteIds, setNoteIds] = useRecoilState(noteIdsAtom);
   const { has_onboarded } = useRecoilValue(settingsAtom);
-  const [saveSnapshotToDisk] = usePersistence({ minutes: 1 });
+  const { saveSnapshotToDisk } = usePersistence({ minutes: 1 });
+  
   useHotkeys("ctrl+s", saveSnapshotToDisk, {
     enableOnTags: ["TEXTAREA", "INPUT"],
   });
