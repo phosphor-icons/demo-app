@@ -27,7 +27,7 @@ const ToolbarTools = forwardRef<HTMLDivElement, ToolbarProps>(
     };
 
     const addNote = () => {
-      setNodeIds((ids) => [...ids, `note-${nanoid()}`]);
+      setNodeIds((ids) => [...ids, nanoid()]);
     };
 
     return (
